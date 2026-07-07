@@ -27,7 +27,19 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col relative">
+        {children}
+        <div
+          className="fixed bottom-4 right-4 z-50 text-[12px] opacity-75 font-sans"
+          style={{
+            color: "#ffffff",
+            mixBlendMode: "difference",
+            fontFamily: "var(--font-geist-sans), sans-serif",
+          }}
+        >
+          Privacy Policy &nbsp; © 2026
+        </div>
+      </body>
     </html>
   );
 }
