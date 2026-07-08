@@ -28,12 +28,22 @@ export default function Home() {
       <Link href="/order" className="cursor-pointer">
         <div className="relative w-64 h-64">
           <Image
-            src="/logo.webp"
+            src="/logo.png"
             alt="The Corner Bagel Logo"
             fill
+            sizes="256px"
             priority
             className="object-contain"
           />
+          <div className="absolute bottom-16 -right-10 w-10 h-10 animate-logo-bounce">
+            <Image
+              src="/logo-2.png"
+              alt="Corner Bagel Logo secondary"
+              fill
+              sizes="40px"
+              className="object-contain"
+            />
+          </div>
         </div>
       </Link>
     </div>

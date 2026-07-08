@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function OrderPage() {
   const textStyle = {
@@ -23,7 +24,7 @@ export default function OrderPage() {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-white p-6 overflow-hidden">
-      <div className="max-w-md text-center flex flex-col" style={textStyle}>
+      <div className="max-w-md relative text-center flex flex-col" style={textStyle}>
         <p className="m-0 mb-5" style={{ fontWeight: 700 }}>No online Ordering</p>
         <p className="m-0 mb-1">All orders taken at the walk up window</p>
         <p className="m-0 mb-5">Wednesday-Sunday:  7am - 2pm</p>
@@ -48,6 +49,17 @@ export default function OrderPage() {
         >
           Close
         </Link>
+
+        {/* Floating icon */}
+        <div className="absolute -bottom-5 -right-8 w-10 h-10">
+          <Image
+            src="/icon.png"
+            alt="Corner Bagel Icon"
+            fill
+            sizes="30px"
+            className="object-contain"
+          />
+        </div>
       </div>
     </div>
   );
