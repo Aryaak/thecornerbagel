@@ -31,7 +31,7 @@ export default function Home() {
             src="/logo.png"
             alt="The Corner Bagel Logo"
             fill
-            sizes="256px"
+            unoptimized
             priority
             className="object-contain"
           />
@@ -40,7 +40,7 @@ export default function Home() {
               src="/logo-2.png"
               alt="Corner Bagel Logo secondary"
               fill
-              sizes="40px"
+              unoptimized
               className="object-contain"
             />
           </div>

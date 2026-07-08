@@ -56,7 +56,7 @@ export default function OrderPage() {
             src="/icon.png"
             alt="Corner Bagel Icon"
             fill
-            sizes="30px"
+            unoptimized
             className="object-contain"
           />
         </div>
