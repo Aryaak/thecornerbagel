@@ -39,7 +39,7 @@ export default function RootLayout({
             fontFamily: "var(--font-geist-sans), sans-serif",
           }}
         >
-          <Link href="/privacy-policy" className="hover:underline">
+          <Link href="/privacy-policy" className="hover:cursor-pointer">
             Privacy Policy &nbsp; © 2026
           </Link>
         </div>
