@@ -28,7 +28,7 @@ export default function Home() {
       <Link href="/order" className="cursor-pointer">
         <div className="relative w-64 h-64">
           <Image
-            src="/logo.png"
+            src="/logo.svg"
             alt="The Corner Bagel Logo"
             fill
             unoptimized
@@ -37,7 +37,7 @@ export default function Home() {
           />
           <div className="absolute bottom-16 -right-10 w-10 h-10 animate-logo-bounce">
             <Image
-              src="/logo-2.png"
+              src="/logo-2.svg"
               alt="Corner Bagel Logo secondary"
               fill
               unoptimized

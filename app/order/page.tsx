@@ -51,9 +51,9 @@ export default function OrderPage() {
         </Link>
 
         {/* Floating icon */}
-        <div className="absolute -bottom-5 -right-8 w-10 h-10">
+        <div className="absolute -bottom-5 -right-8 w-7 h-7">
           <Image
-            src="/icon.png"
+            src="/icon.svg"
             alt="Corner Bagel Icon"
             fill
             unoptimized
