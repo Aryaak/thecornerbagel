@@ -10,15 +10,22 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --animate-logo-bounce: bounceLogo 1s ease-in-out infinite alternate;
+  --animate-logo-roll: rollLogo 6s linear both;
 
-  @keyframes bounceLogo {
+  @keyframes rollLogo {
     from {
-      transform: translateY(0) scaleX(0.795) scaleY(0.65);
+      transform: translateX(-100vw) rotate(-2160deg);
     }
     to {
-      transform: translateY(-24px) scaleX(1) scaleY(1);
+      transform: translateX(0) rotate(0deg);
     }
+  }
+}
+
+/* Mobile: gelindingnya lebih cepat */
+@media (max-width: 640px) {
+  .animate-logo-roll {
+    animation-duration: 2.8s;
   }
 }
 

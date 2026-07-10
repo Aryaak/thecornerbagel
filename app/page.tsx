@@ -19,14 +19,14 @@ export default function Home() {
 
   return (
     <div
-      className="flex h-screen w-screen items-center justify-center overflow-hidden"
+      className="flex min-h-dvh w-full items-center justify-center overflow-hidden p-6"
       style={{
         backgroundColor: colors[colorIndex],
         transition: "background-color 1000ms ease-in-out",
       }}
     >
       <Link href="/order" className="cursor-pointer">
-        <div className="relative w-64 h-64">
+        <div className="relative h-48 w-48 sm:h-56 sm:w-56 md:h-64 md:w-64 lg:h-72 lg:w-72">
           <Image
             src="/logo.svg"
             alt="The Corner Bagel Logo"
@@ -35,7 +35,7 @@ export default function Home() {
             priority
             className="object-contain"
           />
-          <div className="absolute bottom-16 -right-10 w-10 h-10 animate-logo-bounce">
+          <div className="absolute bottom-[25%] right-[-16%] aspect-square w-[16%] animate-logo-roll">
             <Image
               src="/logo-2.svg"
               alt="Corner Bagel Logo secondary"
