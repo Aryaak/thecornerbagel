@@ -32,11 +32,11 @@ export default function OrderPage() {
           To speak to a member of our team please email{" "}
         </p>
         <a
-            href="mailto:cornerbagel@publicentity.co"
-            className="hover:underline mb-5"
-          >
-            cornerbagel@publicentity.co
-          </a>
+          href="mailto:cornerbagel@publicentity.co"
+          className="hover:underline mb-8"
+        >
+          cornerbagel@publicentity.co
+        </a>
         <p className="m-0 mb-1 font-semibold" style={{ textDecoration: "underline" }}>Location:</p>
         <ul className="list-disc list-inside mb-5">
           <li>3076 W 8th, Los Angeles, CA 90005</li>
