@@ -51,7 +51,7 @@ export default function OrderPage() {
         </Link>
 
         {/* Floating icon */}
-        <div className="absolute -bottom-2 md:-right-4 right-0 w-7 h-7">
+        <div className="absolute -bottom-0 -right-4 w-7 h-7">
           <Image
             src="/icon.svg"
             alt="Corner Bagel Icon"

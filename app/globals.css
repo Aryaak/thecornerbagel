@@ -10,11 +10,13 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --animate-logo-roll: rollLogo 6s linear both;
+  --animate-logo-roll: rollLogo 5s linear both;
 
   @keyframes rollLogo {
     from {
-      transform: translateX(-100vw) rotate(-2160deg);
+      /* start at the left edge of the viewport so the donut is visible
+         immediately, then rolls right to its resting position */
+      transform: translateX(calc(-50vw - 200px)) rotate(-1440deg);
     }
     to {
       transform: translateX(0) rotate(0deg);

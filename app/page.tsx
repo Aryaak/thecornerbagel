@@ -41,6 +41,7 @@ export default function Home() {
               alt="Corner Bagel Logo secondary"
               fill
               unoptimized
+              priority
               className="object-contain"
             />
           </div>
