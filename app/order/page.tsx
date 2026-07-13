@@ -51,7 +51,10 @@ export default function OrderPage() {
         </Link>
 
         {/* Floating icon */}
-        <div className="absolute -bottom-0 md:-right-4 right-0 w-7 h-7">
+        <Link
+          href="/bagel"
+          className="absolute -bottom-0 md:-right-4 right-0 w-7 h-7 cursor-pointer"
+        >
           <Image
             src="/icon.svg"
             alt="Corner Bagel Icon"
@@ -59,7 +62,7 @@ export default function OrderPage() {
             unoptimized
             className="object-contain"
           />
-        </div>
+        </Link>
       </div>
     </div>
   );

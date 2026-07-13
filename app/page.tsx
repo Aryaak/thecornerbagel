@@ -4,24 +4,47 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-const colors = ["#ffffff", "#2A0B13", "#0F0F0F"];
-
 export default function Home() {
-  const [colorIndex, setColorIndex] = useState(0);
+  const [rolling, setRolling] = useState(true);
+  const [pulse, setPulse] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setColorIndex((prevIndex) => (prevIndex + 1) % colors.length);
-    }, 5000);
+    // Roll lasts 5s on desktop, 2.8s on mobile (see .animate-logo-roll in globals.css)
+    const isMobile =
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 640px)").matches;
+    const rollDuration = isMobile ? 2800 : 5000;
 
-    return () => clearInterval(interval);
+    // Selagi menggelinding: background bergantian antara dua warna gelap.
+    // Interval sama dengan durasi transisi supaya pergantiannya mulus terus.
+    const interval = setInterval(() => {
+      setPulse((prev) => !prev);
+    }, 1000);
+
+    const timeout = setTimeout(() => {
+      clearInterval(interval);
+      setRolling(false);
+    }, rollDuration);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
   }, []);
+
+  // Semua perubahan warna (termasuk kembali ke putih) memakai transisi yang sama
+  // sehingga tidak ada lompatan warna yang kasar.
+  const backgroundColor = rolling
+    ? pulse
+      ? "#0F0F0F"
+      : "#2A0B13"
+    : "#ffffff";
 
   return (
     <div
       className="flex min-h-dvh w-full items-center justify-center overflow-hidden p-6"
       style={{
-        backgroundColor: colors[colorIndex],
+        backgroundColor,
         transition: "background-color 1000ms ease-in-out",
       }}
     >
