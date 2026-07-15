@@ -27,7 +27,7 @@ export default function OrderPage() {
       <div className="max-w-md relative text-center flex flex-col" style={textStyle}>
         <p className="m-0 mb-5" style={{ fontWeight: 700 }}>No online Ordering</p>
         <p className="m-0 mb-1">All orders taken at the walk up window</p>
-        <p className="m-0 mb-5">Wednesday-Sunday:  7am - 2pm</p>
+        <p className="m-0 mb-5">Tuesday - Saturday:  7am - 2pm</p>
         <p className="m-0 mb-1">
           To speak to a member of our team please email{" "}
         </p>
@@ -53,7 +53,7 @@ export default function OrderPage() {
         {/* Floating icon */}
         <Link
           href="/bagel"
-          className="absolute -bottom-0 md:-right-4 right-0 w-7 h-7 cursor-pointer"
+          className="absolute bottom-0 right-0 h-5 w-5 cursor-pointer"
         >
           <Image
             src="/icon.svg"
