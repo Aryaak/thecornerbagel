@@ -1,68 +1,10 @@
-import Link from "next/link";
-import Image from "next/image";
+import OrderCardBody, { orderTextStyle } from "../OrderCardBody";
 
 export default function OrderPage() {
-  const textStyle = {
-    fontFamily: "var(--font-geist-sans), sans-serif",
-    fontWeight: 400,
-    fontSize: "16px",
-    lineHeight: "100%",
-    letterSpacing: "-0.03em",
-    color: "#000000",
-  };
-
-  const closeStyle = {
-    fontFamily: "var(--font-geist-sans), sans-serif",
-    fontWeight: 400,
-    fontSize: "14px",
-    lineHeight: "100%",
-    letterSpacing: "-0.02em",
-    textDecoration: "underline",
-    textDecorationStyle: "solid" as const,
-    color: "#2D2D2D",
-  };
-
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-white p-6 overflow-hidden">
-      <div className="max-w-md relative text-center flex flex-col" style={textStyle}>
-        <p className="m-0 mb-5" style={{ fontWeight: 700 }}>No online Ordering</p>
-        <p className="m-0 mb-1">All orders taken at the walk up window</p>
-        <p className="m-0 mb-5">Tuesday - Saturday:  7am - 2pm</p>
-        <p className="m-0 mb-1">
-          To speak to a member of our team please email{" "}
-        </p>
-        <a
-          href="mailto:cornerbagel@publicentity.co"
-          className="hover:underline mb-8"
-        >
-          cornerbagel@publicentity.co
-        </a>
-        <p className="m-0 mb-1 font-semibold" style={{ textDecoration: "underline" }}>Location:</p>
-        <ul className="list-disc list-inside mb-5">
-          <li>3076 W 8th, Los Angeles, CA 90005</li>
-        </ul>
-
-        <Link
-          href="/"
-          className="cursor-pointer"
-          style={closeStyle}
-        >
-          Close
-        </Link>
-
-        {/* Floating icon */}
-        <Link
-          href="/bagel"
-          className="absolute bottom-0 right-0 h-5 w-5 cursor-pointer"
-        >
-          <Image
-            src="/icon.svg"
-            alt="Corner Bagel Icon"
-            fill
-            unoptimized
-            className="object-contain"
-          />
-        </Link>
+      <div className="max-w-md relative text-center flex flex-col" style={orderTextStyle}>
+        <OrderCardBody />
       </div>
     </div>
   );

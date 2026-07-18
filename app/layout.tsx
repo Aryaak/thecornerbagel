@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import CornerBagelIcon from "./CornerBagelIcon";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col relative" suppressHydrationWarning>
         {children}
+        <CornerBagelIcon />
         <div
           className="fixed bottom-4 right-4 z-50 text-[12px] opacity-75 font-sans"
           style={{

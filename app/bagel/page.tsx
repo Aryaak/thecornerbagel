@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
@@ -340,21 +339,6 @@ export default function BagelPage() {
           >
             <ArrowIcon className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
           </button>
-
-          {/* Corner bagel icon — bottom-right of the image (frame). */}
-          <Link
-            href="/order"
-            onClick={(e) => e.stopPropagation()}
-            className="absolute bottom-0 right-0 h-5 w-5 cursor-pointer sm:bottom-16"
-          >
-            <Image
-              src="/icon.svg"
-              alt="Corner Bagel Icon"
-              fill
-              unoptimized
-              className="object-contain"
-            />
-          </Link>
         </div>
 
         {/* Caption — always directly below the image */}
