@@ -3,10 +3,13 @@ import Link from "next/link";
 // The text style the order card is measured and rendered with. Exported so the
 // corner-icon overlay can render an invisible copy of this body at the exact
 // same size, pinning the icon to the same spot on every page.
+//
+// The sizes scale with the viewport (clamp) instead of using breakpoint
+// classes, so the card and the overlay can never drift apart.
 export const orderTextStyle = {
   fontFamily: "var(--font-geist-sans), sans-serif",
   fontWeight: 400,
-  fontSize: "16px",
+  fontSize: "clamp(14px, 3.8vw, 16px)",
   lineHeight: "100%",
   letterSpacing: "-0.03em",
   color: "#000000",
@@ -15,7 +18,7 @@ export const orderTextStyle = {
 const closeStyle = {
   fontFamily: "var(--font-geist-sans), sans-serif",
   fontWeight: 400,
-  fontSize: "14px",
+  fontSize: "clamp(12px, 3.3vw, 14px)",
   lineHeight: "100%",
   letterSpacing: "-0.02em",
   textDecoration: "underline",
@@ -29,27 +32,24 @@ const closeStyle = {
 export default function OrderCardBody() {
   return (
     <>
-      <p className="m-0 mb-5" style={{ fontWeight: 700 }}>Right Around The Corner.</p>
-      <div className="self-center text-left mb-5">
-        <p className="m-0 mb-1">Find fresh Corner Bagels at:</p>
-        <ul className="list-disc list-inside">
-          <li>TWSS</li>
-          <li>Horang Tea</li>
-        </ul>
-      </div>
-      <p className="m-0 mb-1">Or visit our walk-up window:</p>
-      <p className="m-0 mb-1">3076 W 8th St.</p>
-      <p className="m-0 mb-5">Los Angeles, CA 90005</p>
-      <p className="m-0 mb-1">Tuesday – Saturday</p>
-      <p className="m-0 mb-8">7:00 AM – 2:00 PM</p>
-      <p className="m-0 mb-1" style={{ fontWeight: 700 }}>No online ordering.</p>
-      <p className="m-0 mb-5">Available only at our partner locations and walk-up window.</p>
-      <p className="m-0 mb-1">
-        To speak to a member of our team please email{" "}
-      </p>
+      <p className="m-0 mb-4 md:mb-5" style={{ fontWeight: 700 }}>Right Around The Corner.</p>
+      <p className="m-0 mb-1" style={{ fontWeight: 700 }}>No Online Ordering</p>
+      <p className="m-0 mb-4 md:mb-5">Available only at our partner locations and walk-up window.</p>
+      {/* Bulleted, but self-centered so the two items stay left-aligned with
+          each other instead of each centering on its own. The markers are drawn
+          by hand (list-none + a flex row) because the browser's own list marker
+          leaves a gap that can't be tightened. */}
+      <ul className="m-0 list-none self-center text-left mb-4 md:mb-5">
+        <li className="flex items-baseline gap-1.5 mb-1">
+          <span aria-hidden>•</span>TWSS
+        </li>
+        <li className="flex items-baseline gap-1.5">
+          <span aria-hidden>•</span>Horang Tea
+        </li>
+      </ul>
       <a
         href="mailto:cornerbagel@publicentity.co"
-        className="hover:underline mb-8"
+        className="underline mb-4 md:mb-5"
       >
         cornerbagel@publicentity.co
       </a>

@@ -33,7 +33,7 @@ export default function CornerBagelIcon() {
         <Link
           href={href}
           aria-label="Corner Bagel"
-          className="pointer-events-auto absolute bottom-0 right-0 h-5 w-5 cursor-pointer"
+          className="pointer-events-auto absolute -bottom-2 right-7 md:-bottom-18 md:-right-22 h-3 w-3 md:h-5 md:w-5 cursor-pointer"
         >
           <Image
             src="/icon.svg"

@@ -3,14 +3,22 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-// Slide order, left -> right: stack-2 (0), expand (1), schmear (2).
-const EXPAND_INDEX = 1;
-const LAST_INDEX = 2;
+// Slide order, left -> right: expand (0), schmear (1). Expand is first, so the
+// left arrow never shows on open — there's nothing to its left.
+const EXPAND_INDEX = 0;
+const LAST_INDEX = 1;
+
+// The arrows sit on the frame's left/right edges (24px wide on mobile, 28px on
+// sm+). Everything that has to clear them — the images and the caption — is
+// inset by exactly that much on mobile, so the artwork stays as large as it can
+// without running underneath. Desktop has room to spare, so the gutter goes.
+// Keep this in sync with the frame's mobile height, which subtracts it.
+const gutter = "px-6 sm:px-0";
 
 // Images are bottom-aligned so every slide's bottom edge lands on the frame's
 // bottom — that keeps the caption (just below the frame) directly under the
 // image and the corner icon (at the frame's bottom-right) at the image's corner.
-const slidePanel = "flex h-full w-full shrink-0 items-end justify-center";
+const slidePanel = `flex h-full w-full shrink-0 items-end justify-center ${gutter}`;
 const slideImage = "max-h-full max-w-full w-auto object-contain";
 
 // The expand slide used to be one flattened composite (expand.png, 541x603).
@@ -36,24 +44,42 @@ const EXPAND_BAGELS = [
 // Opening the slide spreads the bagels out from a pile at the box's bottom
 // centre. Each one animates from `gatherTransform` back to identity.
 const GATHER_SCALE = 0.42;
-const SPREAD_MS = 240;
-// Hold the pile until the carousel has faded in and the resting stack has
-// shrunk away — otherwise the bagels have already flown apart by the time
-// they're visible and the gather never reads. Keep this >= the carousel's
-// fade (the `duration-150` on it) and the stack timings below. Only applied on
-// the way out; closing re-gathers immediately, under cover of the fade.
-const SPREAD_DELAY_MS = 130;
+
+// Every bagel shares one duration and one delay — deliberately no stagger, so
+// the eleven read as a single cluster opening and closing in unison. What makes
+// it feel natural is the easing, not offsetting the starts: the spread leaves
+// the pile fast and takes a long time settling into place (a decelerating ease
+// -out, like something thrown that coasts to a stop), while the gather eases in
+// and out so the bagels drift off their spots and land on the pile without
+// braking. The gather is shorter than the spread — collapsing something reads
+// as deliberate, unfolding it reads as generous.
+const SPREAD_MS = 420;
+const SPREAD_EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
+const GATHER_MS = 300;
+const GATHER_EASE = "cubic-bezier(0.5, 0, 0.35, 1)";
 
 // The resting stack shrinks toward the frame's bottom centre — the same anchor
 // the pile sits on — so it reads as the stack collapsing into that pile rather
 // than two unrelated images crossfading. It lands on GATHER_SCALE for the same
 // reason: it ends up the size of the pile it hands over to.
-const STACK_SHRINK_MS = 120;
+const STACK_SHRINK_MS = 180;
 // The fade trails the shrink so the eye registers "it got smaller" before it
 // goes, and finishes as SPREAD_DELAY_MS elapses — the spread starts on an
 // empty frame.
-const STACK_FADE_MS = 80;
-const STACK_FADE_DELAY_MS = 40;
+const STACK_FADE_MS = 110;
+const STACK_FADE_DELAY_MS = 70;
+
+// Hold the pile until the resting stack has shrunk away and handed over —
+// otherwise the bagels have already flown apart by the time they're visible and
+// the gather never reads.
+const SPREAD_DELAY_MS = STACK_SHRINK_MS;
+// Closing runs the same handover backwards: the bagels gather first, and only
+// once they're nearly on the pile does the carousel fade out and the stack
+// grow back out of it. Without these delays the fade outruns the gather and
+// closing reads as a cut rather than a collapse.
+const CAROUSEL_FADE_MS = 140;
+const CAROUSEL_FADE_OUT_DELAY_MS = GATHER_MS - 80;
+const STACK_RETURN_DELAY_MS = GATHER_MS - 40;
 
 // Each bagel travels this much of the way to the pile at the box's bottom
 // centre. Short of 1 on purpose: converging on the exact same point stacks all
@@ -176,7 +202,7 @@ export default function BagelPage() {
   // Arrows sit at the frame edges, centered on the frame (which is tall, so its
   // middle is roughly the viewport's middle on both mobile and desktop).
   const arrowButton =
-    "absolute z-10 top-1/2 -translate-y-1/2 flex h-9 w-9 sm:h-7 sm:w-7 " +
+    "absolute z-10 top-1/2 -translate-y-1/2 flex h-6 w-6 sm:h-7 sm:w-7 " +
     "items-center justify-center rounded-full border-2 border-black text-black " +
     "transition-all duration-200 hover:border-black hover:bg-black hover:text-white " +
     "cursor-pointer";
@@ -184,12 +210,14 @@ export default function BagelPage() {
   return (
     <div className="flex h-dvh w-full items-center justify-center overflow-hidden bg-white p-6 sm:items-end sm:pb-20">
       <div className="relative flex w-[min(92vw,620px)] flex-col items-center">
-        {/* Frame = the image area + the interactive/hover surface. It's a tall
-            in-flow box so the caption flows directly beneath it and the icon can
-            anchor to its bottom-right. Mobile centers the frame; desktop pins it
-            to the bottom and lets it fill the screen height. */}
+        {/* Frame = the image area + the interactive/hover surface. The slides
+            live in it as absolute layers, so it can't size to them — its height
+            is set explicitly. On mobile that height is the height the widest
+            slide (expand, 541x603) actually takes at the available width, so
+            the frame hugs the artwork and the caption sits right under it;
+            64dvh caps it on short screens. Desktop fills the screen height. */}
         <div
-          className="relative w-full select-none h-[64dvh] sm:h-[calc(100dvh-140px)]"
+          className="relative w-full select-none h-[min(64dvh,calc((92vw_-_3rem)_*_1.114))] sm:h-[calc(100dvh-140px)]"
           onMouseEnter={canHover ? open : undefined}
           onMouseLeave={canHover ? close : undefined}
           onClick={onTap}
@@ -199,14 +227,14 @@ export default function BagelPage() {
           {/* Resting stack — shown when not active. Opening shrinks it into the
               pile the carousel hands over to, then fades it out. */}
           <div
-            className={`absolute inset-0 flex items-end justify-center ${
+            className={`absolute inset-0 flex items-end justify-center ${gutter} ${
               active ? "pointer-events-none opacity-0" : "opacity-100"
             }`}
             style={{
               transition: reduceMotion
                 ? "opacity 150ms"
                 : `opacity ${STACK_FADE_MS}ms ease ${
-                    active ? STACK_FADE_DELAY_MS : 0
+                    active ? STACK_FADE_DELAY_MS : STACK_RETURN_DELAY_MS
                   }ms`,
             }}
           >
@@ -224,34 +252,31 @@ export default function BagelPage() {
                   active && !reduceMotion ? `scale(${GATHER_SCALE})` : "scale(1)",
                 transition: reduceMotion
                   ? undefined
-                  : `transform ${STACK_SHRINK_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+                  : `transform ${STACK_SHRINK_MS}ms ${GATHER_EASE} ${
+                      active ? 0 : STACK_RETURN_DELAY_MS
+                    }ms`,
               }}
             />
           </div>
 
           {/* Carousel revealed when active */}
           <div
-            className={`absolute inset-0 overflow-hidden transition-opacity duration-150 ${
+            className={`absolute inset-0 overflow-hidden ${
               active ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
+            style={{
+              transition: reduceMotion
+                ? "opacity 150ms"
+                : `opacity ${CAROUSEL_FADE_MS}ms ease ${
+                    active ? 0 : CAROUSEL_FADE_OUT_DELAY_MS
+                  }ms`,
+            }}
           >
             <div
               className="flex h-full transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${index * 100}%)` }}
             >
-              {/* 0 — stack-2 */}
-              <div className={slidePanel}>
-                <Image
-                  src="/stack-2.png"
-                  alt="Assorted bagels"
-                  width={540}
-                  height={360}
-                  unoptimized
-                  className={slideImage}
-                />
-              </div>
-
-              {/* 1 — expand: the 11 bagels, each its own file */}
+              {/* 0 — expand: the 11 bagels, each its own file */}
               <div className={`${slidePanel} [container-type:size]`}>
                 {/* Sized against the panel (hence the cq units) so the whole
                     arrangement scales as one unit and always keeps the source
@@ -287,16 +312,16 @@ export default function BagelPage() {
                             : gatherTransform(b),
                         transition: reduceMotion
                           ? undefined
-                          : `transform ${SPREAD_MS}ms cubic-bezier(0.22, 1, 0.36, 1) ${
-                              active ? SPREAD_DELAY_MS : 0
-                            }ms`,
+                          : active
+                            ? `transform ${SPREAD_MS}ms ${SPREAD_EASE} ${SPREAD_DELAY_MS}ms`
+                            : `transform ${GATHER_MS}ms ${GATHER_EASE}`,
                       }}
                     />
                   ))}
                 </div>
               </div>
 
-              {/* 2 — schmear */}
+              {/* 1 — schmear */}
               <div className={slidePanel}>
                 <Image
                   src="/schmear.png"
@@ -322,7 +347,7 @@ export default function BagelPage() {
               showLeft ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
-            <ArrowIcon className="h-3.5 w-3.5 rotate-180 sm:h-3 sm:w-3" />
+            <ArrowIcon className="h-3 w-3 rotate-180 sm:h-3 sm:w-3" />
           </button>
 
           {/* Right arrow */}
@@ -337,12 +362,12 @@ export default function BagelPage() {
               showRight ? "opacity-100" : "pointer-events-none opacity-0"
             }`}
           >
-            <ArrowIcon className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
+            <ArrowIcon className="h-3 w-3 sm:h-3 sm:w-3" />
           </button>
         </div>
 
         {/* Caption — always directly below the image */}
-        <p className="m-0 mt-3 text-sm" style={captionStyle}>
+        <p className={`m-0 mt-3 text-sm ${gutter}`} style={captionStyle}>
           {caption}
         </p>
       </div>
